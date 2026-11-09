@@ -40,8 +40,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git-lfs rsync
           git lfs install
-          yes | sdkmanager --licenses >/dev/null
-          sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653" "cmake;3.22.1"
 
       - name: Import all source files without touching the source repository
         run: |
