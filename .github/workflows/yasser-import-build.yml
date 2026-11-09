@@ -55,6 +55,12 @@ jobs:
           mkdir -p third_party/gl4es
           rsync -a --exclude='.git' /tmp/gl4es/ third_party/gl4es/
           test -f third_party/gl4es/CMakeLists.txt
+          # openal-soft is also recorded as a gitlink in the source tree.
+          git clone https://github.com/kcat/openal-soft.git /tmp/openal-soft
+          git -C /tmp/openal-soft checkout 2dc741b54a49fc6a7716afd1504ca1056cff7db4
+          mkdir -p third_party/openal-soft
+          rsync -a --exclude='.git' /tmp/openal-soft/ third_party/openal-soft/
+          test -f third_party/openal-soft/CMakeLists.txt
 
       - name: Apply requested cinematic splash screen
         run: |
