@@ -153,9 +153,9 @@ jobs:
       - name: Configure runner Android SDK and NDK paths
         run: |
           test -d "$ANDROID_HOME/ndk" || { echo "Android NDK directory is missing: $ANDROID_HOME/ndk"; exit 1; }
-          NDK_PATH="$(find "$ANDROID_HOME/ndk" -mindepth 1 -maxdepth 1 -type d -exec sh -c 'test -f "$1/source.properties"' _ {} \\; -print | sort -V | tail -n 1)"
-          test -n "$NDK_PATH" || { echo "No valid NDK installation was found under $ANDROID_HOME/ndk"; exit 1; }
-          printf 'sdk.dir=%s\\nndk.dir=%s\\n' "$ANDROID_HOME" "$NDK_PATH" > platform/android/local.properties
+          NDK_PATH="$(find "$ANDROID_HOME/ndk" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -n "$NDK_PATH" && test -f "$NDK_PATH/source.properties" || { echo "No valid NDK installation was found under $ANDROID_HOME/ndk"; exit 1; }
+          printf 'sdk.dir=%s\nndk.dir=%s\n' "$ANDROID_HOME" "$NDK_PATH" > platform/android/local.properties
           echo "Using Android NDK: $NDK_PATH"
 
       - name: Build Android release APK
