@@ -1,0 +1,66 @@
+// written by bastiaan konings schuiling 2008 - 2015
+// this work is public domain. the code is undocumented, scruffy, untested, and should generally not be used for anything important.
+// i do not offer support, so don't ask. to be used for inspiration :)
+
+#include "matchdata.hpp"
+
+MatchData::MatchData(int team1DatabaseID, int team2DatabaseID) {
+  teamData[0] = new TeamData(team1DatabaseID);
+  teamData[1] = new TeamData(team2DatabaseID);
+
+  isTrainingMode = false;
+  trainingType = 1; // default to e_TrainingType_FreePlay
+  const char *envTraining = std::getenv("TRAINING_MODE");
+  if (envTraining && std::string(envTraining) == "1") {
+    isTrainingMode = true;
+    const char *envType = std::getenv("TRAINING_TYPE");
+    if (envType) {
+      trainingType = atoi(envType);
+    }
+  }
+
+  goalCount[0] = 0;
+  goalCount[1] = 0;
+
+  possessionTime_ms[0] = 0;
+  possessionTime_ms[1] = 0;
+
+  shots[0] = 0;
+  shots[1] = 0;
+  shotsOnTarget[0] = 0;
+  shotsOnTarget[1] = 0;
+  fouls[0] = 0;
+  fouls[1] = 0;
+  offsides[0] = 0;
+  offsides[1] = 0;
+  corners[0] = 0;
+  corners[1] = 0;
+  freeKicks[0] = 0;
+  freeKicks[1] = 0;
+  passes[0] = 0;
+  passes[1] = 0;
+  passesCompleted[0] = 0;
+  passesCompleted[1] = 0;
+  crosses[0] = 0;
+  crosses[1] = 0;
+  interceptions[0] = 0;
+  interceptions[1] = 0;
+  tackles[0] = 0;
+  tackles[1] = 0;
+  saves[0] = 0;
+  saves[1] = 0;
+
+  possession60seconds = 0.0f;
+}
+
+MatchData::~MatchData() {
+  delete teamData[0];
+  delete teamData[1];
+}
+
+void MatchData::AddPossessionTime_10ms(int teamID) {
+  possessionTime_ms[teamID] += 10;
+  if (teamID == 0) possession60seconds = std::max(possession60seconds - 0.01f, -60.0f);
+  else if (teamID == 1) possession60seconds = std::min(possession60seconds + 0.01f, 60.0f);
+  //printf("pos60s: %f\n", possession60seconds);
+}

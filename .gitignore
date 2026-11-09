@@ -1,0 +1,11 @@
+platform/android/app/build/
+.gradle/
+build/
+*.log
+platform/android/app/.cxx/
+platform/android/.gradle/
+logs
+crash
+scratch/
+*.apk
+*.blend1
