@@ -48,6 +48,13 @@ jobs:
           git lfs pull || true
           cd "$GITHUB_WORKSPACE"
           rsync -a --exclude='.git' /tmp/football-source/ ./
+          # The source repository records gl4es as a gitlink but has no .gitmodules file.
+          # Fetch the exact pinned upstream revision so CMake receives its source files.
+          git clone https://github.com/ptitSeb/gl4es.git /tmp/gl4es
+          git -C /tmp/gl4es checkout 17f0894e19d1553e4176276c759915dab44c08e2
+          mkdir -p third_party/gl4es
+          rsync -a --exclude='.git' /tmp/gl4es/ third_party/gl4es/
+          test -f third_party/gl4es/CMakeLists.txt
 
       - name: Apply requested cinematic splash screen
         run: |
